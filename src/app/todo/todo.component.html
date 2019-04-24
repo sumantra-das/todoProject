@@ -1,0 +1,89 @@
+<div class="container">
+
+  <p></p>
+  <p></p>
+  <p></p>
+  
+  <form class="form-inline" #todoAddFrom="ngForm" (ngSubmit)="todoAddFromSubmit(todoAddFrom.value)">  
+    <div class="form-group mx-sm-3 mb-2">
+      <label for="inputPassword2" class="sr-only">Project Name</label>
+      <input type="text" class="form-control"  placeholder="Enter todo Name" name="todoName" ngModel>
+      &nbsp;
+      <select class="custom-select pull-right"  name="todoPriority" ngModel>
+        <option value="3">High</option>
+        <option value="2">Medium</option>
+        <option value="1">Low</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Add</button>   
+  </form>
+
+  <div class="row">
+    
+  </div>
+  
+  <div class="row">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Project Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Priority</th>
+          <th scope="col">Option
+            <select class="custom-select pull-right" (change)="updateTodolist($event.target.value)">
+              <option value="AT">All tasks</option>
+              <option value="DT">Done tasks</option>
+              <option value="UT">Undone tasks</option>
+              <option value="BP"> Based on priority</option>
+            </select>
+          </th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of todolist; index as k">
+          <th scope="row">{{k+1}}</th>          
+          <td>{{t.name}}</td>
+          <th><input type="checkbox" [checked]="t.completed"  (change)="updateCompleteStatus(k)" /></th>
+          <td>{{ t.priority }}</td>
+          <td>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" (click)="updatetodoModal(k)">Edit</button>
+              <button type="button" class="btn btn-info" >Delete</button>
+            </div>
+          </td>
+        </tr>
+       
+      </tbody>
+    </table>
+  </div>
+  
+  
+  
+  </div>
+  
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Update Project Name</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input [(ngModel)]="todoNamenew" type="text">
+          <select class="custom-select pull-right"  name="todoPriority" [(ngModel)]="todoPrioritynew">
+            <option [ngValue]="3" [selected]="todoPrioritynew=='3'">High</option>
+            <option [ngValue]="2" [selected]="todoPrioritynew=='2'">Medium</option>
+            <option [ngValue]="1" selected>Low</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="updatetodo()" >Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
