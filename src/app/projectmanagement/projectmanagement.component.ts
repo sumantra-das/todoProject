@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectdataService} from '../services/projectdata.service';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-projectmanagement',
@@ -23,14 +24,20 @@ export class ProjectmanagementComponent implements OnInit {
     //console.log(this.allProject)
   }
 
-   projectAddFromSubmit(formValue:any){
-     // console.log(formValue.projectName);
-     if(formValue.projectName!=''){
-      this.projectservice.save(formValue.projectName,JSON.stringify([]));
-      this.showProjectList(); 
+   projectAddFromSubmit(form:any){
+    let formValue=form.value;
+     if(formValue.projectName!='' ||formValue.projectName!=null){
+      var isDuplicate = this.allProject.map(function(item:any){ return item }).indexOf(formValue.projectName);      
+      if(isDuplicate==-1){
+        this.projectservice.save(formValue.projectName,JSON.stringify([]));
+        this.showProjectList();
+      }else{
+        alert('Dupliacte Entry!');
+      }       
      }else{
        alert("Please enter a value!");
-     }   
+     }  
+     form.resetForm();    
   }
 
   showProjectList(){

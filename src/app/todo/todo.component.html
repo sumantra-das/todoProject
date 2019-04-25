@@ -4,18 +4,19 @@
   <p></p>
   <p></p>
   
-  <form class="form-inline" #todoAddFrom="ngForm" (ngSubmit)="todoAddFromSubmit(todoAddFrom.value)">  
+  <form class="form-inline" #todoAddFrom="ngForm" (ngSubmit)="todoAddFromSubmit(todoAddFrom)">  
     <div class="form-group mx-sm-3 mb-2">
       <label for="inputPassword2" class="sr-only">Project Name</label>
       <input type="text" class="form-control"  placeholder="Enter todo Name" name="todoName" ngModel>
       &nbsp;
-      <select class="custom-select pull-right"  name="todoPriority" ngModel>
-        <option value="3">High</option>
+      <select class="form-control pull-right"  name="todoPriority" ngModel>
+        <option value="3" selected>High</option>
         <option value="2">Medium</option>
         <option value="1">Low</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary mb-2">Add</button>   
+    <button type="submit" class="btn btn-primary mb-2">Add</button>  &nbsp;
+    <button type="button" class="btn btn-primary mb-2" routerLink="/">Back</button>   
   </form>
 
   <div class="row">
@@ -45,12 +46,12 @@
         <tr *ngFor="let t of todolist; index as k">
           <th scope="row">{{k+1}}</th>          
           <td>{{t.name}}</td>
-          <th><input type="checkbox" [checked]="t.completed"  (change)="updateCompleteStatus(k)" /></th>
+          <th><input type="checkbox" [checked]="t.completed"  (change)="updateCompleteStatus(t.name)" /></th>
           <td>{{ t.priority }}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" (click)="updatetodoModal(k)">Edit</button>
-              <button type="button" class="btn btn-info" >Delete</button>
+              <button type="button" class="btn btn-info" (click)="deleteTodo(t.name)">Delete</button>
             </div>
           </td>
         </tr>
@@ -74,7 +75,7 @@
         </div>
         <div class="modal-body">
           <input [(ngModel)]="todoNamenew" type="text">
-          <select class="custom-select pull-right"  name="todoPriority" [(ngModel)]="todoPrioritynew">
+          <select class="form-control pull-right"  name="todoPriority" [(ngModel)]="todoPrioritynew">
             <option [ngValue]="3" [selected]="todoPrioritynew=='3'">High</option>
             <option [ngValue]="2" [selected]="todoPrioritynew=='2'">Medium</option>
             <option [ngValue]="1" selected>Low</option>
