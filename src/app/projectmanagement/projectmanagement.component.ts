@@ -26,7 +26,7 @@ export class ProjectmanagementComponent implements OnInit {
 
    projectAddFromSubmit(form:any){
     let formValue=form.value;
-     if(formValue.projectName!='' ||formValue.projectName!=null){
+     if(formValue.projectName!='' && formValue.projectName!==null){
       var isDuplicate = this.allProject.map(function(item:any){ return item }).indexOf(formValue.projectName);      
       if(isDuplicate==-1){
         this.projectservice.save(formValue.projectName,JSON.stringify([]));

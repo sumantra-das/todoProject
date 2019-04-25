@@ -16,6 +16,7 @@ export class TodoComponent implements OnInit {
   private todoNamenew:any;
   private todoPrioritynew:any;
   private editToDoIndex:any;
+  private filterSelectedValue:any;
 
   constructor(private route:ActivatedRoute, private projectservice:ProjectdataService) { 
     this.route.params.subscribe(route => this.id = decodeURI(route.id));
@@ -30,9 +31,8 @@ export class TodoComponent implements OnInit {
   
 
   todoAddFromSubmit(form:any){
-    let formValue:any=form.value;
-     //console.log(formValue.todoName);
-     if(formValue.todoName!=''){
+    let formValue:any=form.value;     
+     if(formValue.todoName!='' && formValue.todoName!=null){
       this.obj = JSON.parse(this.projectservice.fetchProject(this.id));
       var isDuplicate = this.obj.map(function(item:any){ return item.name }).indexOf(formValue.todoName);
       
@@ -57,7 +57,12 @@ export class TodoComponent implements OnInit {
 
   showtodoList(){
     this.todolist=JSON.parse(this.projectservice.fetchProject(this.id));
-  }
+    this.todolist.forEach((element, index) => {
+      if(element.priority === '1') {element.priority  = 'Low'; }
+      if(element.priority === '2') {element.priority  = 'Medium'; }
+      if(element.priority === '3') {element.priority  = 'High'; }
+      });
+    }
 
   updateCompleteStatus(name:any){
     //console.log(this.obj[t].completed);
@@ -71,6 +76,7 @@ export class TodoComponent implements OnInit {
       this.obj[t].completed=1;
     }
     this.projectservice.save(this.id,JSON.stringify(this.obj));
+    this.updateTodolist(this.filterSelectedValue);
   }
 
   deleteTodo(name:any){
@@ -106,21 +112,29 @@ export class TodoComponent implements OnInit {
       const result = this.todolist.sort( (p, p2) => {return p2.priority - p.priority; });
       this.todolist=result;
     }
+    this.filterSelectedValue=event;
     
   }
 
   updatetodo(){
-    // console.log(this.todoPrioritynew)
-    // console.log(this.todoNamenew)
-    this.todolist[this.editToDoIndex].name=this.todoNamenew;
-    this.todolist[this.editToDoIndex].priority=this.todoPrioritynew;    
+    if(this.todoNamenew=='' || this.todoNamenew==null){
+        alert('Please fill up!')
+    }else{
+      this.obj[this.editToDoIndex].name=this.todoNamenew;
+      this.obj[this.editToDoIndex].priority=this.todoPrioritynew;  
+      this.projectservice.save(this.id,JSON.stringify(this.obj));
+    }   
+    this.showtodoList();   
   }
   
-  updatetodoModal(i:any){
-    this.showtodoList();
-    this.editToDoIndex=i;
-    this.todoNamenew=this.todolist[i].name;
-    this.todoPrioritynew = this.todolist[i].priority;
+  updatetodoModal(name:any){
+    this.obj = JSON.parse(this.projectservice.fetchProject(this.id)); 
+    var t = this.obj.findIndex(function(item, i){
+      return item.name === name
+    }); 
+    this.editToDoIndex=t;
+    this.todoNamenew=this.obj[t].name;
+    this.todoPrioritynew = this.obj[t].priority;
   }
 
 }
