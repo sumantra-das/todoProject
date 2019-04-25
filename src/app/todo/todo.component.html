@@ -47,12 +47,12 @@
         <tr *ngFor="let t of todolist; index as k">
           <th scope="row">{{k+1}}</th>          
           <td>{{t.name}}</td>
-          <th><input type="checkbox" [checked]="t.completed"  (change)="updateCompleteStatus(t.name)" /></th>
+          <th><input type="checkbox" [checked]="t.completed"  (change)="updateCompleteStatus(t.id)" /></th>
           <td>{{ t.priority }}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" (click)="updatetodoModal(t.name)">Edit</button>
-              <button type="button" class="btn btn-info" (click)="deleteTodo(t.name)">Delete</button>
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" (click)="updatetodoModal(t.id)">Edit</button>
+              <button type="button" class="btn btn-info" (click)="deleteTodo(t.id)">Delete</button>
             </div>
           </td>
         </tr>

@@ -32,22 +32,14 @@ export class TodoComponent implements OnInit {
 
   todoAddFromSubmit(form:any){
     let formValue:any=form.value;     
-     if(formValue.todoName!='' && formValue.todoName!=null){
-      this.obj = JSON.parse(this.projectservice.fetchProject(this.id));
-      var isDuplicate = this.obj.map(function(item:any){ return item.name }).indexOf(formValue.todoName);
-      
-
+     if(formValue.todoName!='' && formValue.todoName!=null){   
       this.obj.push({
-       'name':formValue.todoName,
-       'priority':formValue.todoPriority,
-       'completed':0
+        'id':Date.now(),
+        'name':formValue.todoName,
+        'priority':formValue.todoPriority,
+        'completed':0
      });
-     if(isDuplicate==-1){
-      this.projectservice.save(this.id,JSON.stringify(this.obj));
-     }else{
-    alert("Dupliacte value!");
-  } 
-    
+      this.projectservice.save(this.id,JSON.stringify(this.obj)); 
     this.showtodoList();
     form.resetForm();    
   }else{
@@ -64,11 +56,11 @@ export class TodoComponent implements OnInit {
       });
     }
 
-  updateCompleteStatus(name:any){
+  updateCompleteStatus(id:any){
     //console.log(this.obj[t].completed);
     this.obj = JSON.parse(this.projectservice.fetchProject(this.id)); 
     var t = this.obj.findIndex(function(item, i){
-      return item.name === name
+      return item.id === id
     }); 
     if(this.obj[t].completed==1){
       this.obj[t].completed=0;
@@ -79,11 +71,11 @@ export class TodoComponent implements OnInit {
     this.updateTodolist(this.filterSelectedValue);
   }
 
-  deleteTodo(name:any){
+  deleteTodo(id:any){
     //console.log(this.obj[t].completed);
     this.obj = JSON.parse(this.projectservice.fetchProject(this.id)); 
     var i = this.obj.findIndex(function(item, i){
-      return item.name === name
+      return item.id === id
     }); 
     const filteredItems = this.obj.slice(0, i).concat(this.obj.slice(i + 1, this.obj.length))
     this.projectservice.save(this.id,JSON.stringify(filteredItems));
@@ -127,10 +119,10 @@ export class TodoComponent implements OnInit {
     this.showtodoList();   
   }
   
-  updatetodoModal(name:any){
+  updatetodoModal(id:any){
     this.obj = JSON.parse(this.projectservice.fetchProject(this.id)); 
     var t = this.obj.findIndex(function(item, i){
-      return item.name === name
+      return item.id === id
     }); 
     this.editToDoIndex=t;
     this.todoNamenew=this.obj[t].name;
