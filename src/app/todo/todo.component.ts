@@ -31,7 +31,8 @@ export class TodoComponent implements OnInit {
   
 
   todoAddFromSubmit(form:any){
-    let formValue:any=form.value;     
+    let formValue:any=form.value;   
+    this.obj = JSON.parse(this.projectservice.fetchProject(this.id));   
      if(formValue.todoName!='' && formValue.todoName!=null){   
       this.obj.push({
         'id':Date.now(),
@@ -39,6 +40,7 @@ export class TodoComponent implements OnInit {
         'priority':formValue.todoPriority,
         'completed':0
      });
+     
       this.projectservice.save(this.id,JSON.stringify(this.obj)); 
     this.showtodoList();
     form.resetForm();    
