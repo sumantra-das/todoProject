@@ -86,6 +86,7 @@ export class TodoComponent implements OnInit {
 
   updateTodolist(event:any){
     //console.log(event);
+    
     if(event=='AT'){
       this.showtodoList();
     }
@@ -100,12 +101,16 @@ export class TodoComponent implements OnInit {
       this.todolist=result;
     }
     if(event=='BP'){
-      this.showtodoList();
-      const result = this.todolist.sort( (p, p2) => {return p2.priority - p.priority; });
+      this.obj = JSON.parse(this.projectservice.fetchProject(this.id)); 
+      const result = this.obj.sort( (p, p2) => {return p2.priority - p.priority; });
+      result.forEach((element, index) => {
+        if(element.priority === '1') {element.priority  = 'Low'; }
+        if(element.priority === '2') {element.priority  = 'Medium'; }
+        if(element.priority === '3') {element.priority  = 'High'; }
+        });
       this.todolist=result;
     }
-    this.filterSelectedValue=event;
-    
+    this.filterSelectedValue=event;    
   }
 
   updatetodo(){
